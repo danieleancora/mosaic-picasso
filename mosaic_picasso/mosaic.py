@@ -10,6 +10,14 @@ from joblib import Parallel, delayed
 import mosaic_picasso.utils as utils
 
 
+# I've added this just to suppress the tons of warnings that mosaic throws when executed
+import warnings
+warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+np.seterr(divide='ignore', invalid='ignore')
+
+
+
 class MosaicPicasso:
     def __init__(self, bins=256, beta=0.0, gamma=0.1, cycles=40, subunit_sz=40, stride=40, nch=3):
         self.bins = bins
@@ -93,6 +101,7 @@ class MosaicPicasso:
             P1 = self.update_P_matrix(P0, Ptmp)
             P0 = P1.copy()
             print(cnt, end=",")
+        print('\n')
 
         img_c = self.update(P1)
         img_c[img_c < 0] = 0
